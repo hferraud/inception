@@ -6,8 +6,6 @@ ARG SQL_PASSWORD
 ARG SQL_ROOT_PASSWORD
 
 RUN apt update && apt upgrade -y
-RUN apt autoremove --yes
-RUN apt clean autoclean
 RUN apt install mariadb-server -y
 
 COPY ./config/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf

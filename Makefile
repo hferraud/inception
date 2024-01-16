@@ -1,47 +1,42 @@
-NAME			=	inception
+NAME				=	inception
 
-VOL_MDB			=	srcs_mariadb
+DOCKER_COMPOSE_PATH	=	$(DIR_SRC)docker-compose.yml
 
-VOL_WPS			=	srcs_wordpress
+DOCKER_COMPOSE		=	docker compose -f $(DOCKER_COMPOSE_PATH)
 
-VOLUMES			=	$(VOL_MDB) $(VOL_WPS)
+DIR_SRC				=	srcs/
 
-DIR_SRC			=	srcs/
+VOL_PATH			=	/home/hferraud/data/
 
-CONFIG_PATH		=	$(DIR_SRC)docker-compose.yml
+VOLUMES				=	$(WORDPRESS_VOLUME_PATH) $(MARIADB_VOLUME_PATH)
 
-VOL_PATH		=	/Users/hferraud/data/
-
-VOL_MARIADB		=	$(VOL_PATH)mariadb/
-
-VOL_WORDPRESS	=	$(VOL_PATH)wordpress/
-
-VOL_DIRS		=	$(VOL_MARIADB) $(VOL_WORDPRESS)
+include $(DIR_SRC).env
 
 .PHONY:	all
-all:	$(NAME)
+all: $(NAME)
 
-$(NAME):	$(VOL_DIRS)
-					docker compose -f $(CONFIG_PATH) up --build
+$(NAME): $(VOLUMES)
+		$(MAKE) up
 
-.PHONY:	build
-build:
-					docker compose -f $(CONFIG_PATH) up --build
+.PHONY: up
+up:
+		$(DOCKER_COMPOSE) up --build
 
-.PHONY:	fclean
-fclean:				clean
-					docker image rm nginx mariadb wordpress -f
+.PHONY: down
+down:
+		$(DOCKER_COMPOSE) down
 
 .PHONY:	clean
 clean:
-					rm -rf $(VOL_DIRS)
-					docker compose -f $(CONFIG_PATH) down
-					docker volume rm $(VOLUMES) -f
+		$(DOCKER_COMPOSE) down --volumes --rmi all
+
+.PHONY:	fclean
+fclean: clean
+		rm -rf $(VOLUMES)
 
 .PHONY: re
-re:
-	$(MAKE) fclean
-	$(MAKE) all
+re: clean
+		$(MAKE) all
 
-$(VOL_DIRS):
-					mkdir -p $@
+$(VOLUMES):
+		mkdir -p $(VOLUMES)

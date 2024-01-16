@@ -1,9 +1,9 @@
-FROM debian:buster
+FROM debian:bullseye
 
 RUN apt update && apt upgrade -y
-RUN apt install wget php7.3 php-fpm php-mysql mariadb-client -y
+RUN apt install wget php7.4 php-fpm php-mysql mariadb-client -y
 
-COPY ./config/www.conf /etc/php/7.3/fpm/pool.d/www.conf
+COPY ./config/www.conf /etc/php/7.4/fpm/pool.d/www.conf
 
 # install wordpress CLI
 RUN wget https://github.com/wp-cli/wp-cli-bundle/releases/download/v2.7.0/wp-cli-2.7.0.phar

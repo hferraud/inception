@@ -5,18 +5,18 @@ services:
         image: mariadb
         networks:
             - inception
-        env_file: .env
         build:
+            context: requirements/mariadb
+            dockerfile: Dockerfile
             args:
                 SQL_DATABASE: $SQL_DATABASE
                 SQL_USER: $SQL_USER
                 SQL_PASSWORD: $SQL_PASSWORD
                 SQL_ROOT_PASSWORD: $SQL_ROOT_PASSWORD
-            context: requirements/mariadb
-            dockerfile: Dockerfile
+        env_file: .env
         volumes:
             - mariadb:/var/lib/mysql
-        restart: always
+        restart: on-failure
         expose:
             - "3306"
 
@@ -64,10 +64,10 @@ volumes:
         driver_opts:
             type: 'none'
             o: 'bind'
-            device: '/Users/hferraud/data/wordpress'
+            device: $WORDPRESS_VOLUME_PATH
     mariadb:
         driver: local
         driver_opts:
             type: 'none'
             o: 'bind'
-            device: '/Users/hferraud/data/mariadb'
+            device: $MARIADB_VOLUME_PATH

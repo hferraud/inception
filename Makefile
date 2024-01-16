@@ -20,7 +20,7 @@ $(NAME): $(VOLUMES)
 
 .PHONY: up
 up:
-		$(DOCKER_COMPOSE) up --build
+		$(DOCKER_COMPOSE) up -d --build
 
 .PHONY: down
 down:

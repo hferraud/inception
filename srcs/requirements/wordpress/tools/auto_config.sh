@@ -23,6 +23,7 @@ if [ ! -f "${WP_PATH}/wp-config.php" ]; then
 
   wp user create $WP_USER $WP_USER_EMAIL \
               --allow-root \
+              --user-pass=$WP_USER_PASSWORD \
               --path=$WP_PATH
 
 fi
